@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ArtistAndYou</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta http-equiv="Access-Control-Allow-Origin" content="*">
+        <title>Listview - jQuery Mobile Demos</title>
+        <!-- <link rel="shortcut icon" href="../jquery.mobile/images/favicon.ico"> -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+        <link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+        <script src="../js/jquery.js"></script>
+        <!-- <script src="../js/jquery.mobile-1.4.5.min.js"></script> -->
+        <script type="text/javascript" src="../js/useradd.js"></script>
+        <script src='https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.css' rel='stylesheet' />
+    </head>
+    <body>
+        <style>
+  body { margin:0; padding:0; }
+  #map { width:100%; 
+   height: 400px;
+  }
+</style>
+
+        <div data-role="page">
+            <div data-role="header">
+                <h2>Add Waste</h2>
+            </div>
+            <div data-role="main" class="ui-content">
+                <form id="userForm" enctype="multipart/form-data" method="post">
+                    <div class="ui-field-contain">
+                <label>Choose Image</label>
+                <input type="file" name="image" id="image"/>
+                <label for="txtName">Waste Type:</label>
+                <select name="wasteType" id="wasteType">
+                <option value="-1">Choose Waste</option>
+                <option value="Paper">Paper</option>
+                <option value="Steel">Steel</option>
+                <option value="E-Waste">E-Waste</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Glass">Glass</option>
+                </select> <br>
+
+
+                 <label for="txtName" >Quantity:</label>
+                <select name="wasteQuantity" id="Quantity">
+                <option value="-1">Quantity</option>
+                <option value="3 kg">3 kg</option>
+                <option value="5 kg">5 kg</option>
+                <option value="10 kg">10 kg</option>
+
+                
+                </select>
+                <label></label> <br> 
+
+                
+    
+
+                <label for="txtName">Location:</label>
+                <div id='map'></div>
+
+                <!-- <select name="wasteLocation">
+                <option value="-1">Choose Your Location</option>
+                <option value="Balaju">Balaju</option>
+                <option value="Machhapokhari">Machhapokhari</option>
+                <option value="Buspark">Buspark</option>
+                <option value="Samkhusi">Samkhusi</option>
+                <option value="Chabel">Chabel</option>
+                </select> <br> -->
+
+                
+
+
+
+
+
+                        <input type="submit" name="submit" id="onsubmit" onclick="add()" value="submit">
+                        <label></label>
+                        <!-- <input type="submit" name="view" onclick="viewEvent()" value="view"> -->
+                        <label></label>
+                       <input id="clickMe" type="button" value="Back" onclick="BackUser();" />
+                     
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            latitude1 = ""
+            longitude1 = ""
+        L.mapbox.accessToken = 'pk.eyJ1IjoibGVvbmd1cnVuZzAyOSIsImEiOiJjang2NHZzengwODJuNDVxdTM2NDBmdWJlIn0.CPb6da7yRq1sII4tOt7quA';
+        var map = L.mapbox.map('map')
+            .setView([27.7172, 85.3240], 12)
+            .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+        
+        
+        map.on('click', function(e) {
+            latitude1 = e['latlng']['lat']
+            longitude1 = e['latlng']['lng']
+            var marker = L.marker([latitude1, longitude1], {
+      icon: L.mapbox.marker.icon({
+        'marker-color': '#9c89cc'
+      })
+    })
+    .bindPopup('<button class="trigger">Say hi</button>')
+    .addTo(map);
+        })
+
+        document.getElementById("onsubmit").addEventListener("click",function(e) {
+        var wasteType1 = $("#wasteType").find(':selected')['0'].value
+        var Quantity1 = $("#Quantity").find(':selected')['0'].value
+        if(wasteType1 == '-1'){
+            alert("Please select wasteType")
+            return
+        }
+        if(Quantity1 == '-1'){
+            alert("Please select Quantity")
+            return
+        }
+        if(latitude1 == "" || longitude1 == ""){
+            alert("Please click on the map to choose location")
+            return
+        }
+        var data = {
+        image:$('#image')[0].files[0],
+        latitude:latitude1,
+        longitude:longitude1,
+        wasteType:wasteType1,
+        wasteQuantity: Quantity1
+        }
+        var fomdata = new FormData()
+
+        for(x in data){
+            fomdata.append(x,data[x])
+          }
+
+        $.ajax(
+      {
+        url: 'http://localhost/backend/addwaste.php',
+        method:'POST',
+        contentType:false,
+        processData:false, // for all type files it should be false otherwise application/json
+        data: fomdata,   // JSON.stringify(data)
+        dataType:'json',
+        success: (data,status,jqxHR)=>{
+          console.log(data)
+          alert("Success adding waste")
+          e.preventDefault()
+        },
+        error:(data,result)=>{
+            console.log(data)
+          alert("Success adding waste")
+          e.preventDefault()
+        }
+      }
+    )
+        $.get("http://localhost/backend/viewcollector.php",function(data,status){
+                    console.log(data)
+                    for( d in data){
+
+                        var data1 = {
+                        email:data[d]['useremail']
+                        }
+                        var fomdata = new FormData()
+                        for(x in data1){
+                            fomdata.append(x,data1[x])
+                          }
+                        $.ajax(
+                          {
+                            url: 'http://localhost:5000/mail',
+                            method:'POST',
+                            contentType:false,
+                            processData:false, // for all type files it should be false otherwise application/json
+                            data: fomdata,   // JSON.stringify(data)
+                            dataType:'json',
+                            success: (data,status,jqxHR)=>{
+                                
+                            },
+                            error:(data,result)=>{
+                                
+                            }
+                          }
+                        )
+                    }
+    })
+        e.preventDefault()
+})
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ArtistAndYou</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta http-equiv="Access-Control-Allow-Origin" content="*">
+        <title>Listview - jQuery Mobile Demos</title>
+        <link rel="shortcut icon" href="../jquery.mobile/images/favicon.ico">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+        <link rel="stylesheet" href="../css/themes/default/jquery.mobile-1.4.5.min.css">
+        <script src="../js/jquery.js"></script>
+        <script src="../js/jquery.mobile-1.4.5.min.js"></script>
+        <script type="text/javascript" src="../js/collector.js"></script>
+        <script type="text/javascript" src="../js/showbid.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    </head>
+    <body>
+        <style type="text/css">
+            .collectorhead{
+                color:blue;
+            }
+            .collectorhead:hover{
+                color:grey;
+                cursor: grab;
+            }
+            #myChart{
+                margin-bottom: 10px;
+            }
+        </style>
+        <div data-role="page" id="listpage" data-quicklinks="true">
+            <div data-role="header">
+                <h1>View Bids</h1>
+            </div>
+            <!-- /header -->
+          
+            <label></label>
+            <button onclick="backtobuyer()">Back</button>
+            <div role="main" class="ui-content">
+                <h2>Recent Waste</h2>
+                <div data-demo-html="true">
+                    <canvas id="myChart" width="1" height="1"></canvas>
+
+                    <ul data-role="listview" id="newslist">
+                        <li onclick="onListClicked()">Loading Waste</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div data-role="page" id="update">
+            <div data-role="header">
+                <h2>Update</h2>
+                
+            </div>
+            <div data-role="main">
+                
+                <form id="userForm">
+                    <div class="ui-field-contain">
+                        <label for="txtName">EventId:</label>
+                        <input type="text" name="eventId" id="eventId" data-clear-btn="true"/>
+                        <label for="txtName">Eventname:</label>
+                        <input type="text" name="eventName" id="eventName" data-clear-btn="true"/>
+                        <label for="txtQuantity">EventLocation:</label>
+                        <input type="text" name="eventLocation" id="eventLocation" data-clear-btn="true"/>
+                        <label for="txtName">Event Description</label>
+                        <input type="text" name="eventDes" id="eventDes" data-clear-btn="true"/>
+                        <label for="txtName">Event Date</label>
+                        <input type="date" name="eventDate" id="eventDate" data-clear-btn="true"/>
+                        <label for="txtName">Event Price</label>
+                        <input type="Number" name="eventPrice" id="eventPrice" data-clear-btn="true"/>
+                        <label></label>
+                        <input type="submit" name="submit" onclick="Update()" value="Update">
+                        
+                    </form>
+                    
+                </div>
+                
+            </div>
+            <!-- ------------------for delete page--------------- -->
+            <div data-role="page" id="delete">
+                <div data-role="header">
+                    <h2>Delete</h2>
+                    
+                </div>
+                <div data-role="main">
+                    
+                    <form id="userForm">
+                        <div class="ui-field-contain">
+                            <label for="txtName">timeId:</label>
+                            <input type="text" name="timeId" id="timeId" data-clear-btn="true"/>
+                            
+                            <label></label>
+                            <input type="submit" name="submit" onclick="Delete()" value="Delete">
+
+
+                            
+                        </form>
+                        
+                    </div>
+                
+                </div>
+                <script type="text/javascript">
+                    function backtobuyer(){
+                        window.location = "managerdashboard.html"
+                    }
+                </script>
+
+                <script>
+                var data1 = []
+                $.get("http://localhost/backend/sumpaper.php",function(data,status){
+                    data1.push(data)
+                })
+
+                $.get("http://localhost/backend/sumplastic.php",function(data,status){
+                    data1.push(data)
+                })
+
+                $.get("http://localhost/backend/sumsteel.php",function(data,status){
+                    data1.push(data)
+                })
+
+                $.get("http://localhost/backend/ewaste.php",function(data,status){
+                    data1.push(data)
+                })
+
+                $.get("http://localhost/backend/sumglass.php",function(data,status){
+                    data1.push(data)
+                })
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Paper', 'Plastic', 'Steel', 'E-Waste', 'Glass'],
+                        datasets: [{
+                            label: 'Amount of Bids',
+                            data: data1,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+</script>
+            </body>
+        </html>

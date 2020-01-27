@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello</title>
+	<script src="../js/jquery.js"></script>
+</head>
+<body>
+
+
+
+<script type="text/javascript">
+	$.get("http://localhost/backend/viewcollector.php",function(data,status){
+                    console.log(data)
+                    for( d in data){
+
+				        var data1 = {
+				        email:data[d]['useremail']
+				        }
+				        var fomdata = new FormData()
+				        for(x in data1){
+				            fomdata.append(x,data1[x])
+				          }
+     					$.ajax(
+					      {
+					        url: 'http://localhost:5000/mail',
+					        method:'POST',
+					        contentType:false,
+					        processData:false, // for all type files it should be false otherwise application/json
+					        data: fomdata,   // JSON.stringify(data)
+					        dataType:'json',
+					        success: (data,status,jqxHR)=>{
+					          console.log(data)
+					          alert("Email sent")
+					          e.preventDefault()
+					        },
+					        error:(data,result)=>{
+					            console.log(data)
+					          alert("Email sent")
+					          e.preventDefault()
+					        }
+					      }
+					    )
+                    }
+    })	
+</script>
+
+</body>
+</html>

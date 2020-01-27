@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
+     <title>Listview - jQuery Mobile Demos</title>
+        <link rel="shortcut icon" href="jquery.mobile/images/favicon.ico">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+        <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+        <script src="js/jquery.js"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js"></script>
+        <script type="text/javascript" src="js/user.js"></script>
+    
+
+  <!--   <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title> -->
+</head>
+
+<body>
+    <style type="text/css">
+        .username{
+            margin: 0;
+    min-height: 2.2em;
+    text-align: left;
+    border: 0;
+    -webkit-appearance: none;
+    -webkit-border-radius: inherit;
+    border-radius: inherit;
+    width: 100%;
+        }
+    </style>
+        <div data-role="page" id="login">
+                <div data-role="header" data-position="fixed" style="background-color:blue;color:white;">
+                        <h2>Waste Recycle </h2>
+                </div>
+                <div data-role="main" class="ui-content">
+                        <form id="userForm">
+                                <label>Username</label>
+                                <input type="username" class="username" name="username" id="username" required>
+                                <label>Email</label>
+                                <input type="email" name="userEmail" id="userEmail" required>
+                                <label>Password</label>
+                                <input type="password" name="userPassword" id="userPassword" required>
+                                <label></label>
+                                <label></label>
+                                  <button type="button"  onclick="Login();" style="background-color:red;color:white;" class="ui-btn ui-icon-user ui-btn-icon-left">Login</button>
+
+                    <label></label>
+                                 <a class="ui-btn ui-icon-user ui-btn-icon-left" style="background-color:purple;color:white;"
+                    onclick="Register()">Register</a>
+
+
+                        </form>
+                        
+                </div>
+                <div data-role="footer" data-position="fixed" style="background-color:blue;color:white;">
+                        <h2>Created by Bishal</h2>
+                        
+                </div>
+                
+        </div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>
